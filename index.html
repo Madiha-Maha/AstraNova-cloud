@@ -1,84 +1,224 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width,initial-scale=1.0" />
-        <link rel="stylesheet" href="style.css"></link>
-        <script src="script.js" defer></script>
-        <script src="script.js"></script>
-        <title>AstraNova cloud</title>
-        </head>
-        <body>
-            <div class="sky" aria-hidden></div>
-            <div class="app">
-                <div class="shell" role="application" aria-label="AstraNova cloud">
-                    <aside class="sidebar">
-                        <div class="brand">
-                            <div class="logo"></div>
-                            <div>
-                                <h1>AstraNova cloud</h1>
-                                <p>Beautifully simple cloud file manager</p>
-
-                            </div>
-                        </div>
-<div class="controls">
-    <button id="new Folder" class="button">+ New Folder</button>
-    <label class="button primarily" for="file input"> Upload Files</label>
-    <input id="fileInput" type="file" multiple style="display: none">
-    <div style="display: flex; gap: 8px;align-items: center">
-        <button id="downloadAll" class="button"> Download .zip</button>
-        <button id="clearAll"  class="button"> clear</button>
-
-</div>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AstraNova Cloud</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="stars"></div>
+    <div class="orbits"></div>
     
-</div>
-<div class="folders" id="folderList" aria-label="folders">
-    <!-- dynamic -->
-</div>
-<footer>Local demp - user browser storage. To make real cloud: add a backened (I can help).</footer>
+    <div class="app-container">
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo-circle">
+                    <i class="fas fa-cloud"></i>
+                </div>
+                <div class="brand-info">
+                    <h1>AstraNova</h1>
+                    <p>Cloud Storage</p>
+                </div>
+                <button class="theme-toggle" id="themeToggle" title="Toggle theme">
+                    <i class="fas fa-moon"></i>
+                </button>
+            </div>
 
-                    </aside>
-<main class="main">
-    <div class="toolbar">
-        <div clas="search">
-            <input id="search" placeholder="search files, folders, types..." />
+            <nav class="sidebar-nav">
+                <button class="nav-item active" data-section="dashboard">
+                    <i class="fas fa-chart-pie"></i>
+                    <span>Dashboard</span>
+                </button>
+                <button class="nav-item" data-section="files">
+                    <i class="fas fa-folder"></i>
+                    <span>Files</span>
+                </button>
+                <button class="nav-item" data-section="shared">
+                    <i class="fas fa-share-alt"></i>
+                    <span>Shared</span>
+                </button>
+                <button class="nav-item" data-section="recent">
+                    <i class="fas fa-clock"></i>
+                    <span>Recent</span>
+                </button>
+            </nav>
 
-        </div>
-        <div style="display: flex;gap: 8px;align-items: center">
-            <div id="storageMeter">storage: <span id="storageUsed">0 KB</span></div>
+            <div class="sidebar-actions">
+                <button class="btn-upload" id="uploadBtn" title="Upload files">
+                    <i class="fas fa-plus"></i>
+                    <span>Upload</span>
+                </button>
+                <button class="btn-create-folder" id="createFolderBtn" title="Create folder">
+                    <i class="fas fa-folder-plus"></i>
+                    <span>New Folder</span>
+                </button>
+            </div>
 
-        </div>
-    </div>
-<div style="margin-top: 12px;display: flex;gap: 12px;align-items: center">
-    <div class="dropzone" id="dropzone" style="flex:1">
-        <div style="font-weight: 700">Drag & drop files here</div>
-        <div class="ft-small">or click Upload in the left panel. Files are saved locally (IndexedDB/localStorage)</div>
-    </div>
-</div>
-<div class="grid" id="grid" aria-live="polite"></div>
-
-</main>
+            <div class="storage-info">
+                <div class="storage-chart">
+                    <div class="storage-fill" id="storageFill"></div>
+                </div>
+                <div class="storage-text">
+                    <span id="storageUsed">0 MB</span>
+                    <span id="storageTotal">/ 5 GB</span>
                 </div>
             </div>
-<!-- file preview modal -->
- <div id="modal" class="modal" role="dialog" aria-hidden="true">
-    <div class="panel">
-        <div style="display: flex;justify-content: space-between;align-items: center">
-            <div id="modalTitle">preview</div>
-            <div><button id="closeModal" class="button">Close</button></div>
-        </div>
-        <div id="modalContent" style="margin-top: 12px"></div>
-    </div>
- </div>
- <!-- context menu -->
-  <div id="ctxMenu" class="menu" role="menu">
-   <button id="ctxDownload">Download</button>
-   <button id="ctxpreview">preview</button>
-   <button id="ctxRename">Rename</button>
-   <button id="ctxDelete">Delete</button>
 
-  </div>
-  
-        </body>
-        <button onclick="toggleTheme()">Toggle Theme</button>
+            <div class="sidebar-footer">
+                <p>Connected to Cloud Server</p>
+            </div>
+        </aside>
+
+        <main class="main-content">
+            <header class="header">
+                <div class="breadcrumb">
+                    <span class="breadcrumb-item">
+                        <i class="fas fa-home"></i>
+                    </span>
+                    <span class="breadcrumb-path" id="breadcrumb"></span>
+                </div>
+                
+                <div class="header-actions">
+                    <div class="search-box">
+                        <i class="fas fa-search"></i>
+                        <input type="text" id="searchInput" placeholder="Search files, folders...">
+                    </div>
+                    <button class="btn-view-toggle" id="viewToggle" title="Toggle view">
+                        <i class="fas fa-th"></i>
+                    </button>
+                    <div class="dropdown">
+                        <button class="btn-menu" id="menuBtn">
+                            <i class="fas fa-ellipsis-v"></i>
+                        </button>
+                        <div class="dropdown-content" id="dropdownMenu">
+                            <a href="#" data-action="download-all"><i class="fas fa-download"></i> Download All</a>
+                            <a href="#" data-action="refresh"><i class="fas fa-sync"></i> Refresh</a>
+                            <a href="#" data-action="select-all"><i class="fas fa-check-square"></i> Select All</a>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <div class="content">
+                <!-- Dashboard Section -->
+                <section id="dashboard-section" class="section active">
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-icon files">
+                                <i class="fas fa-file"></i>
+                            </div>
+                            <div class="stat-content">
+                                <p class="stat-label">Total Files</p>
+                                <p class="stat-value" id="totalFiles">0</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon folders">
+                                <i class="fas fa-folder"></i>
+                            </div>
+                            <div class="stat-content">
+                                <p class="stat-label">Folders</p>
+                                <p class="stat-value" id="totalFolders">0</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon storage">
+                                <i class="fas fa-database"></i>
+                            </div>
+                            <div class="stat-content">
+                                <p class="stat-label">Storage Used</p>
+                                <p class="stat-value" id="dashboardStorage">0 MB</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon activity">
+                                <i class="fas fa-activity"></i>
+                            </div>
+                            <div class="stat-content">
+                                <p class="stat-label">Last Activity</p>
+                                <p class="stat-value" id="lastActivity">Now</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="recent-files">
+                        <h2>Recent Files</h2>
+                        <div class="file-list" id="recentList"></div>
+                    </div>
+                </section>
+
+                <!-- Files Section -->
+                <section id="files-section" class="section">
+                    <div class="dropzone" id="dropzone">
+                        <div class="dropzone-icon">
+                            <i class="fas fa-cloud-upload-alt"></i>
+                        </div>
+                        <div class="dropzone-text">
+                            <p>Drag and drop files here</p>
+                            <span>or click the Upload button</span>
+                        </div>
+                    </div>
+                    <div class="files-grid" id="filesGrid"></div>
+                </section>
+
+                <!-- Shared Section -->
+                <section id="shared-section" class="section">
+                    <div class="empty-state">
+                        <i class="fas fa-share-alt"></i>
+                        <p>No shared items yet</p>
+                    </div>
+                </section>
+
+                <!-- Recent Section -->
+                <section id="recent-section" class="section">
+                    <div class="file-list" id="recentFilesSection"></div>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <!-- Hidden input for file upload -->
+    <input type="file" id="fileInput" multiple hidden>
+
+    <!-- Context Menu -->
+    <div class="context-menu" id="contextMenu">
+        <button class="context-item" data-action="download">
+            <i class="fas fa-download"></i> Download
+        </button>
+        <button class="context-item" data-action="rename">
+            <i class="fas fa-edit"></i> Rename
+        </button>
+        <button class="context-item" data-action="move">
+            <i class="fas fa-arrows-alt"></i> Move
+        </button>
+        <button class="context-item" data-action="share">
+            <i class="fas fa-share"></i> Share
+        </button>
+        <hr>
+        <button class="context-item delete" data-action="delete">
+            <i class="fas fa-trash"></i> Delete
+        </button>
+    </div>
+
+    <!-- Modal for dialogs -->
+    <div class="modal" id="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalTitle">Dialog</h2>
+                <button class="close-btn" id="closeModal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body" id="modalBody"></div>
+            <div class="modal-footer" id="modalFooter"></div>
+        </div>
+    </div>
+
+    <!-- Toast notifications -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <script src="app.js"></script>
+</body>
 </html>
